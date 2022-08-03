@@ -1,9 +1,13 @@
 ---
 - name: "AUTOMATED | 4.4 | PATCH | Ensure logrotate assigns appropriate permissions"
-  lineinfile:
-      path: /etc/logrotate.conf
-      regexp: '^create'
-      line: ' create {{ ubtu20cis_logrotate_create_settings }}'
+  block:
+    - name: "AUTOMATED | 4.4 | PATCH | Ensure logrotate assigns appropriate permissions | /etc/logrotate.conf"
+      lineinfile:
+        path: /etc/logrotate.conf
+        regexp: '^create'
+        line: ' create {{ ubtu20cis_logrotate_create_settings }}'
+    - name: "AUTOMATED | 4.4 | PATCH | Ensure logrotate assigns appropriate permissions | /etc/logrotate.d/*"
+      command: sed -i 's/\(create\s\)\([0-9]*\)\([0-9]\{3\}\)\(\s.*\)/\1\2640\4/' /etc/logrotate.d/*
   when:
       - ubtu20cis_rule_4_4
   tags:
